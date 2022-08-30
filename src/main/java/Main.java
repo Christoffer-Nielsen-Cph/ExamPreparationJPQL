@@ -1,4 +1,4 @@
-import Facade.SchoolFacade;
+import facades.SchoolFacade;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;

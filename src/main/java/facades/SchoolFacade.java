@@ -1,4 +1,4 @@
-package Facade;
+package facades;
 
 import entities.Semester;
 import entities.Student;
