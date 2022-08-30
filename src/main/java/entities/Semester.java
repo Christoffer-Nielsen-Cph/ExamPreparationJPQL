@@ -1,7 +1,8 @@
 package entities;
 
 import javax.persistence.*;
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,13 +20,13 @@ public class Semester {
     private String name;
 
     @OneToMany(mappedBy = "currentsemester")
-    private Set<Student> students = new LinkedHashSet<>();
+    private List<Student> students = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "TEACHER_SEMESTER",
             joinColumns = @JoinColumn(name = "teaching_ID"),
             inverseJoinColumns = @JoinColumn(name = "teachers_ID"))
-    private Set<Teacher> teachers = new LinkedHashSet<>();
+    private List<Teacher> teachers = new ArrayList<>();
 
     public Semester() {
     }
@@ -59,20 +60,28 @@ public class Semester {
         this.name = name;
     }
 
-    public Set<Student> getStudents() {
+    public List<Student> getStudents() {
         return students;
     }
 
-    public void setStudents(Set<Student> students) {
+    public void setStudents(List<Student> students) {
         this.students = students;
     }
 
-    public Set<Teacher> getTeachers() {
+    public List<Teacher> getTeachers() {
         return teachers;
     }
 
-    public void setTeachers(Set<Teacher> teachers) {
+    public void setTeachers(List<Teacher> teachers) {
         this.teachers = teachers;
     }
 
+    @Override
+    public String toString() {
+        return "Semester{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

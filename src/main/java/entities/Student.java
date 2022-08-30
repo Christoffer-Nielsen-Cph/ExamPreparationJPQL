@@ -23,9 +23,10 @@ public class Student {
     public Student() {
     }
 
-    public Student(String firstname, String lastname) {
+    public Student(String firstname, String lastname, Semester currentsemester) {
         this.firstname = firstname;
         this.lastname = lastname;
+        this.currentsemester = currentsemester;
     }
 
     public Long getId() {
@@ -60,4 +61,13 @@ public class Student {
         this.currentsemester = currentsemester;
     }
 
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", currentsemester=" + currentsemester +
+                '}';
+    }
 }
