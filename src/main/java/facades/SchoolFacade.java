@@ -23,31 +23,34 @@ public class SchoolFacade {
         return instance;
     }
 
-    public void createStudent(String fname, String lname){
+    public Student createStudent(String fname, String lname){
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         Student student = new Student(fname,lname, null);
         em.persist(student);
         em.getTransaction().commit();
         em.close();
+        return student;
     }
 
-    public void createSemester(String desc, String name){
+    public Semester createSemester(String desc, String name){
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         Semester semester = new Semester(desc,name);
         em.persist(semester);
         em.getTransaction().commit();
         em.close();
+        return semester;
     }
 
-    public void createTeacher(String fname, String lname){
+    public Teacher createTeacher(String fname, String lname){
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         Teacher teacher = new Teacher(fname,lname);
         em.persist(teacher);
         em.getTransaction().commit();
         em.close();
+        return teacher;
     }
     public void addStudentToSemester(long studentID,long semesterID){
         EntityManager em = emf.createEntityManager();
@@ -60,21 +63,10 @@ public class SchoolFacade {
 
 
     }
-    public void addTeacherToSemester(long teacherID, long semesterID){
+    public void addTeacherToSemester(long teachingID, long teacherID){
         EntityManager em = emf.createEntityManager();
-        TeacherSemesterId teacherSemester = em.find(TeacherSemesterId.class,semesterID);
-
-        Teacher teacher = em.find(Teacher.class,teacherID);
 
 
-        em.getTransaction().begin();
-
-
-        teacherSemester.setTeachersId(teacherID);
-        teacherSemester.setTeachingId(semesterID);
-
-
-        em.getTransaction().commit();
         em.close();
 
     }
