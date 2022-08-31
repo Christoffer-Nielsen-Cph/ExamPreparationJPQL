@@ -5,8 +5,7 @@ import entities.*;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SchoolFacade {
     private static SchoolFacade instance;
@@ -15,88 +14,112 @@ public class SchoolFacade {
     public SchoolFacade() {
     }
 
-    public static SchoolFacade getInstance(EntityManagerFactory _emf){
-        if(instance == null){
+    public static SchoolFacade getInstance(EntityManagerFactory _emf) {
+        if (instance == null) {
             emf = _emf;
             instance = new SchoolFacade();
         }
         return instance;
     }
 
-    public Student createStudent(String fname, String lname){
+    public Student createStudent(String fname, String lname) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        Student student = new Student(fname,lname, null);
+        Student student = new Student(fname, lname, null);
         em.persist(student);
         em.getTransaction().commit();
         em.close();
         return student;
     }
 
-    public Semester createSemester(String desc, String name){
+    public Semester createSemester(String desc, String name) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        Semester semester = new Semester(desc,name);
+        Semester semester = new Semester(desc, name);
         em.persist(semester);
         em.getTransaction().commit();
         em.close();
         return semester;
     }
 
-    public Teacher createTeacher(String fname, String lname){
+    public Teacher createTeacher(String fname, String lname) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        Teacher teacher = new Teacher(fname,lname);
+        Teacher teacher = new Teacher(fname, lname);
         em.persist(teacher);
         em.getTransaction().commit();
         em.close();
         return teacher;
     }
-    public void addStudentToSemester(long studentID,long semesterID){
+
+    public Student addStudentToSemester(long studentID, long semesterID) {
         EntityManager em = emf.createEntityManager();
-        Semester semester = em.find(Semester.class,semesterID);
-        Student student = em.find(Student.class,studentID);
+        Semester semester = em.find(Semester.class, semesterID);
+        Student student = em.find(Student.class, studentID);
         em.getTransaction().begin();
         student.setCurrentsemester(semester);
         em.getTransaction().commit();
         em.close();
+        return student;
 
 
     }
-    public void addTeacherToSemester(long teachingID, long teacherID){
+
+    public void addTeacherToSemester(long semesterID, long teacherID) {
         EntityManager em = emf.createEntityManager();
-
-
+        Teacher teacher = em.find(Teacher.class, teacherID);
+        Semester semester = em.find(Semester.class, semesterID);
+        em.getTransaction().begin();
+        teacher.getSemesters().add(semester);
+        em.getTransaction().commit();
         em.close();
 
     }
-    public void removeTeacherFromSemester(long teacherID, long semesterID){
+
+    public void removeTeacherFromSemester(long teacherID, long semesterID) {
+        EntityManager em = emf.createEntityManager();
+        Teacher teacher = em.find(Teacher.class, teacherID);
+        Semester semester = em.find(Semester.class, semesterID);
+        em.getTransaction().begin();
+        teacher.getSemesters().remove(semester);
+        em.getTransaction().commit();
+        em.close();
 
     }
-    public void updateSemester(long id, String description, String name){
+
+    public void updateSemester(long id, String description, String name) {
         EntityManager em = emf.createEntityManager();
-        Semester semester = em.find(Semester.class,id);
+        Semester semester = em.find(Semester.class, id);
         em.getTransaction().begin();
-        semester.setDescription(description);
-        semester.setName(name);
+        if (semester != null) {
+            semester.setDescription(description);
+            semester.setName(name);
+        }
         em.getTransaction().commit();
         em.close();
     }
-    public List<Student> getAllStudentsFromSemester(long semesterID){
+
+    public Set<Student> getAllStudentsFromSemester(long semesterID) {
         EntityManager em = emf.createEntityManager();
-        List<Student> students = new ArrayList<>();
-        Semester semester = em.find(Semester.class,semesterID);
+        Set<Student> students = new HashSet<>();
+        Semester semester = em.find(Semester.class, semesterID);
         students = semester.getStudents();
         em.close();
         return students;
     }
-    /*public List<Student> getAllStudentsByTeacher(long teacherID){
+
+    public Set<Student> getAllStudentsByTeacher(long teacherID) {
         EntityManager em = emf.createEntityManager();
-        List<Student> students = new ArrayList<>();
-        Teacher teacher = em.find(Teacher.class,teacherID);
+        Teacher teacher = em.find(Teacher.class, teacherID);
+        Set<Student> studentsInSemester = new LinkedHashSet<>();
+        Set<Semester> semesters = teacher.getSemesters();
+        for (Semester semester : semesters) {
+            studentsInSemester = semester.getStudents();
+        }
+        em.close();
+        return studentsInSemester;
 
 
-
-    } */
+    }
 
 }

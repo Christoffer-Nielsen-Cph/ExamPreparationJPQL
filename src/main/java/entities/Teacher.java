@@ -1,8 +1,7 @@
 package entities;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 @Entity
@@ -23,7 +22,7 @@ public class Teacher {
     @JoinTable(name = "TEACHER_SEMESTER",
             joinColumns = @JoinColumn(name = "teachers_ID"),
             inverseJoinColumns = @JoinColumn(name = "teaching_ID"))
-    private List<Semester> semesters = new ArrayList<>();
+    private Set<Semester> semesters = new LinkedHashSet<>();
 
     public Teacher() {
     }
@@ -57,11 +56,11 @@ public class Teacher {
         this.lastname = lastname;
     }
 
-    public List<Semester> getSemesters() {
-        return semesters;
+    public void setSemesters(Set<Semester> semesters) {
+        this.semesters = semesters;
     }
 
-    public void setSemesters(List<Semester> semesters) {
-        this.semesters = semesters;
+    public Set<Semester> getSemesters() {
+        return semesters;
     }
 }

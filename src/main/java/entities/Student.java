@@ -58,7 +58,12 @@ public class Student {
     }
 
     public void setCurrentsemester(Semester currentsemester) {
-        this.currentsemester = currentsemester;
+
+        if(currentsemester != null){
+            this.currentsemester = currentsemester;
+            currentsemester.getStudents().add(this);
+        }
+
     }
 
     @Override
